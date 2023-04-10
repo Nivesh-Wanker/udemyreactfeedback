@@ -35,10 +35,10 @@ function App(){
             <div className="container">
                 <Header text='Feedback'/>
                 <FeedbackForm handleAdd = {addFeedback}/>
-                <FeedbackStats feedback = {feedback}/>
                 {/* <FeedbackStats feedback = {feedback}/> */}
-                <FeedbackList list={feedback} handleDelete = {deleteFeedback} />
-                {/* <FeedbackList handleDelete = {deleteFeedback} /> */}
+                <FeedbackStats />
+                {/* <FeedbackList list={feedback} handleDelete = {deleteFeedback} /> */}
+                <FeedbackList handleDelete = {deleteFeedback} />
                 <AboutIconLink/>
             </div> } />
             <Route path="/about" element={<AboutPage/>}/>
