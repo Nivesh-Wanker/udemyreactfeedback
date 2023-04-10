@@ -3,12 +3,16 @@ import Card from '../Shared/Card'
 import Button from '../Shared/Button'
 import { useState } from 'react'
 import RatingSelect from './RatingSelect'
+import { useContext } from 'react'
+import FeedbackContext from '../Context/FeedbackContext'
 
-function FeedbackForm({handleAdd}) {
+// function FeedbackForm({handleAdd}) {
+function FeedbackForm() {
     const [text,setText] = useState('')
     const [rating,setRating] = useState(10)
     const [btnDisabled,setBtnDisabled] = useState(true)
     const [message,setMessage] = useState('')
+    const {addFeedback} = useContext(FeedbackContext)
 
     const handleTextChange = (e) =>{
         if(text === ''){
@@ -18,6 +22,7 @@ function FeedbackForm({handleAdd}) {
             console.log(text.trim().length+"if")
         }
         //submit button is enabled after 5 letters...bug...check later
+        //when we press backspace, subit is getting disabled when there is one letter for a 4 letter word
         else if(text !== '' && text.trim().length < 3){
             setBtnDisabled(true)
             setMessage('Text must me atleast 4 characters')
@@ -33,12 +38,13 @@ function FeedbackForm({handleAdd}) {
 
     const handleSubmit = (e) =>{
         e.preventDefault()
-        if(text.trim().length>4){
+        if(text.trim().length>3){
             const newFeedback = {
                 text: text,
                 rating: rating
             }
-        handleAdd(newFeedback)
+        // handleAdd(newFeedback)
+        addFeedback(newFeedback)
         setText('')
         
         setBtnDisabled(true)
