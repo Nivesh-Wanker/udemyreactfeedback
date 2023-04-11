@@ -1,9 +1,8 @@
 import React from 'react'
 import Card from '../Shared/Card'
 import Button from '../Shared/Button'
-import { useState } from 'react'
+import { useState,useContext,useEffect } from 'react'
 import RatingSelect from './RatingSelect'
-import { useContext } from 'react'
 import FeedbackContext from '../Context/FeedbackContext'
 
 // function FeedbackForm({handleAdd}) {
@@ -12,26 +11,30 @@ function FeedbackForm() {
     const [rating,setRating] = useState(10)
     const [btnDisabled,setBtnDisabled] = useState(true)
     const [message,setMessage] = useState('')
-    const {addFeedback} = useContext(FeedbackContext)
+    const {addFeedback,feedbackEdit,updateFeedback} = useContext(FeedbackContext)
 
+    useEffect(()=>{
+        if(feedbackEdit.edit){
+            setBtnDisabled(false)
+            setText(feedbackEdit.item.text)
+            setRating(feedbackEdit.item.rating)
+        }
+    },[feedbackEdit])
     const handleTextChange = (e) =>{
         if(text === ''){
             setBtnDisabled(true)
             setMessage(null)
             setMessage('Text must me atleast 4 characters')
-            console.log(text.trim().length+"if")
         }
         //submit button is enabled after 5 letters...bug...check later
         //when we press backspace, subit is getting disabled when there is one letter for a 4 letter word
         else if(text !== '' && text.trim().length < 3){
             setBtnDisabled(true)
             setMessage('Text must me atleast 4 characters')
-            console.log(text.trim().length+"elseif")
         }
         else{
             setMessage(null)
             setBtnDisabled(false)
-            console.log(text.trim().length+"else")
         }
         setText(e.target.value)
     }
@@ -43,10 +46,16 @@ function FeedbackForm() {
                 text: text,
                 rating: rating
             }
+            console.log(feedbackEdit)
+            console.log(newFeedback)
         // handleAdd(newFeedback)
-        addFeedback(newFeedback)
+        if(feedbackEdit.edit){
+            updateFeedback(feedbackEdit.item.id,newFeedback)
+        }
+        else{
+            addFeedback(newFeedback)
+        }
         setText('')
-        
         setBtnDisabled(true)
         }
     }
