@@ -7,13 +7,12 @@ import { useContext } from 'react'
 // function FeedbackList({handleDelete}) {
 function FeedbackList() {
   const {feedback}  = useContext(FeedbackContext)
-  
   return (
     
     <div>
         {feedback.map((item) =>
         <FeedbackItem
-         key={item.id}
+         key={item.ratingId}
          item = {item} 
         //  handleDelete = {handleDelete}
          />

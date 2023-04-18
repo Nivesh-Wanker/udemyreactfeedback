@@ -43,11 +43,9 @@ function FeedbackForm() {
         e.preventDefault()
         if(text.trim().length>3){
             const newFeedback = {
-                text: text,
+                comment: text,
                 rating: rating
             }
-            console.log(feedbackEdit)
-            console.log(newFeedback)
         // handleAdd(newFeedback)
         if(feedbackEdit.edit){
             updateFeedback(feedbackEdit.item.id,newFeedback)

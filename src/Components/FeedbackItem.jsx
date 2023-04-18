@@ -21,10 +21,10 @@ import FeedbackContext from '../Context/FeedbackContext'
         <button className='edit' onClick={()=>editFeedback(item)}>
           <FaEdit color='purple'/>
         </button>
-        <button className='close' onClick={()=>deleteFeedback(item.id)}>
+        <button className='close' onClick={()=>deleteFeedback(item.ratingId)}>
           <FaTimes color='purple'/>
         </button>
-        <div className='text-display'>{item.text}</div>
+        <div className='text-display'>{item.comment}</div>
         {/* <button onClick={handleClick}>Click</button> */}
     </Card>
   )

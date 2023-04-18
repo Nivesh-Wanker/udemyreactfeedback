@@ -1,39 +1,52 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { createContext,useState } from 'react'
-import {v4 as uuid} from 'uuid'
+import axios from 'axios'
+
 const FeedbackContext = createContext()
 
 
 export const FeedbackProvider = ({children}) => {
-
+  const [feedback,setFeedback] = useState([
+    // {
+    //   id:uuid(),
+    //   text: 'This is item 1',
+    //   rating:10
+    // },
+    // {
+    //   id:uuid(),
+    //   text: 'This is item 2',
+    //   rating:9
+    // },
+    // {
+    //   id:uuid(),
+    //   text: 'This is item 3',
+    //   rating:9
+    // },
+  ])
+  useEffect(() => {
+    axios.get("https://localhost:44398/Rating/GetAll")
+    .then(response => setFeedback(response.data)
+    )
+  //   fetch('https://localhost:44398/Rating/GetAll')
+  //  .then(response => response.json())
+  //  .then(data => console.log(data));
+  },[feedback])
   const deleteFeedback = (id) => {
     if(window.confirm("Are you sure you want to delete this?")){
-        setFeedback(feedback.filter((item)=>item.id !==id))
+      //delete feed
+      axios.delete("https://localhost:44398/Rating/Delete?id="+id)
     }
   }
 
   const addFeedback = (newFeedback) => {
-    newFeedback.id=uuid()
-    setFeedback([newFeedback,...feedback])
+    axios.post("https://localhost:44398/Rating/Add",
+    {
+      Rating: newFeedback.rating,
+      Comment: newFeedback.comment
+    })
   }
 
-  const [feedback,setFeedback] = useState([
-    {
-      id:uuid(),
-      text: 'This is item 1',
-      rating:10
-    },
-    {
-      id:uuid(),
-      text: 'This is item 2',
-      rating:9
-    },
-    {
-      id:uuid(),
-      text: 'This is item 3',
-      rating:9
-    },
-  ])
+  
   
   const [feedbackEdit,setFeedbackEdit]=useState({
     item:{},
@@ -49,9 +62,12 @@ export const FeedbackProvider = ({children}) => {
   }
 
   const updateFeedback = (id, updatedItem) =>{
-    setFeedback(feedback.map((item) => id===item.id?{
-      ...item,...updatedItem
-    }:item))
+    var x = {
+      Id:id,
+      Rating: updatedItem.rating,
+      Comment: updatedItem.comment
+    }
+    axios.post("https://localhost:44398/Rating/Update",x)
   }
   return <FeedbackContext.Provider 
   value={{feedback,deleteFeedback,addFeedback,editFeedback,feedbackEdit,updateFeedback}}>
