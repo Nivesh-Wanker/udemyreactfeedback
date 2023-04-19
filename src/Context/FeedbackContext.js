@@ -23,18 +23,23 @@ export const FeedbackProvider = ({children}) => {
     //   rating:9
     // },
   ])
-  useEffect(() => {
+
+  const refresh = () =>{
     axios.get("https://localhost:44398/Rating/GetAll")
     .then(response => setFeedback(response.data)
     )
+  }
+  useEffect(() => {
+    refresh();
   //   fetch('https://localhost:44398/Rating/GetAll')
   //  .then(response => response.json())
   //  .then(data => console.log(data));
-  },[feedback])
+  },[])
   const deleteFeedback = (id) => {
     if(window.confirm("Are you sure you want to delete this?")){
       //delete feed
       axios.delete("https://localhost:44398/Rating/Delete?id="+id)
+      .then(response=>{refresh()})
     }
   }
 
@@ -44,6 +49,7 @@ export const FeedbackProvider = ({children}) => {
       Rating: newFeedback.rating,
       Comment: newFeedback.comment
     })
+    .then(response=>{refresh()})
   }
 
   
@@ -53,12 +59,16 @@ export const FeedbackProvider = ({children}) => {
     edit:false
   })
 
-  const editFeedback = (item) => {
-    setFeedbackEdit({
-      item,
-      edit:true
-    }
-    )
+  const  editFeedback = async (item) => {
+    await axios.get("https://localhost:44398/Rating/Get/"+item.ratingId)
+    //.then(response=>console.log(response.data))
+    .then(response=>setFeedbackEdit({item:response.data,edit:true}))
+    
+    // setFeedbackEdit({
+    //   item,
+    //   edit:true
+    // }
+    //)
   }
 
   const updateFeedback = (id, updatedItem) =>{
@@ -67,7 +77,8 @@ export const FeedbackProvider = ({children}) => {
       Rating: updatedItem.rating,
       Comment: updatedItem.comment
     }
-    axios.post("https://localhost:44398/Rating/Update",x)
+    axios.put("https://localhost:44398/Rating/Update",x)
+    .then((response)=>{refresh()})
   }
   return <FeedbackContext.Provider 
   value={{feedback,deleteFeedback,addFeedback,editFeedback,feedbackEdit,updateFeedback}}>

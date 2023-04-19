@@ -8,7 +8,7 @@ function RatingSelect({select}) {
   const {feedbackEdit} = useContext(FeedbackContext)
 
   useEffect(() => {
-    setSelected(feedbackEdit.item.rating)
+    setSelected(feedbackEdit.item?.rating)
   },[feedbackEdit])
   const handleChange = (e) => {
     // + infront of the e.curr.... converts the string to a number
