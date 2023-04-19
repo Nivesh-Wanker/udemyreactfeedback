@@ -11,6 +11,10 @@ import AboutIconLink from "./Components/AboutIconLink";
 import Post from "./Components/Post";
 import { FeedbackProvider } from './Context/FeedbackContext';
 import { BrowserRouter } from 'react-router-dom';
+import LoginButton from "./Components/LoginButton";
+import LogoutButton from "./Components/LogoutButton";
+import { useAuth0 } from "@auth0/auth0-react";
+import Card from "./Shared/Card";
 
 
 //useparams() to use data from url to the page
@@ -18,10 +22,16 @@ import { BrowserRouter } from 'react-router-dom';
 function App(){
     // const [feedback,setFeedback] = useState(FeedbackData);
     
-    
+    const { user, isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <div>Loading ...</div>;
+  }
     return (
         <FeedbackProvider>
-    <BrowserRouter>
+            <LoginButton/>
+            <LogoutButton/>
+    {isAuthenticated && (<BrowserRouter>
         <Routes>
             <Route exact path="/" element = {
             <div className="container">
@@ -38,7 +48,7 @@ function App(){
             <Route path="/about" element={<AboutPage/>}/>
             <Route path="/post/:id/:name/*" element={<Post/>}/>
         </Routes>
-    </BrowserRouter>
+    </BrowserRouter>)}
     </FeedbackProvider>
 
         // React.createElement("div",{className: "Container"},
